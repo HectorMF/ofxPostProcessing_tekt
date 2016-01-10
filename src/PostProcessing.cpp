@@ -42,19 +42,19 @@ namespace itg
         
         ofFbo::Settings s;
         
-        if (arb)
-        {
-            s.width = width;
-            s.height = height;
-            s.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
-        }
-        else
-        {
+//        if (arb)
+//        {
+//            s.width = width;
+//            s.height = height;
+//            s.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
+//        }
+//        else
+//        {
             s.width = ofNextPow2(width);
             s.height = ofNextPow2(height);
             s.textureTarget = GL_TEXTURE_2D;
-        }
-        
+//        }
+    
         // no need to use depth for ping pongs
         for (int i = 0; i < 2; ++i)
         {
@@ -73,17 +73,26 @@ namespace itg
     
     void PostProcessing::begin()
     {
+//        raw.begin();
+//        ofClear(0,0,0,0);
+//        raw.end();
+        
         raw.begin(false);
         
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
+//        glMatrixMode(GL_PROJECTION);
+//        glPushMatrix();
+//        
+//        glMatrixMode(GL_MODELVIEW);
+//        glPushMatrix();
+//        
+//        glViewport(0, 0, raw.getWidth(), raw.getHeight());
+        ofPushMatrix();
+        ofPushView();
         
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        
-        glViewport(0, 0, raw.getWidth(), raw.getHeight());
+        ofViewport(ofRectangle(0, 0, raw.getWidth(), raw.getHeight()));
         
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+//        ofClear(0,0,0,0);
         
         ofPushStyle();
         glPushAttrib(GL_ENABLE_BIT);
@@ -91,23 +100,36 @@ namespace itg
     
     void PostProcessing::begin(ofCamera& cam)
     {
+//        raw.begin();
+        
+//        raw.end();
+        
         // update camera matrices
         cam.begin();
         cam.end();
         
         raw.begin(false);
         
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glLoadMatrixf(cam.getProjectionMatrix(ofRectangle(0, 0, width, height)).getPtr());
+//        glMatrixMode(GL_PROJECTION);
+//        glPushMatrix();
+//        glLoadMatrixf(cam.getProjectionMatrix(ofRectangle(0, 0, width, height)).getPtr());
+//        
+//        glMatrixMode(GL_MODELVIEW);
+//        glPushMatrix();
+//        glLoadMatrixf(cam.getModelViewMatrix().getPtr());
+//        
+//        glViewport(0, 0, raw.getWidth(), raw.getHeight());
+        ofPushMatrix();
+        ofLoadMatrix(cam.getProjectionMatrix(ofRectangle(0, 0, width, height)).getPtr());
         
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadMatrixf(cam.getModelViewMatrix().getPtr());
+        ofPushView();
+        ofLoadMatrix(cam.getModelViewMatrix().getPtr());
         
-        glViewport(0, 0, raw.getWidth(), raw.getHeight());
+        ofViewport(ofRectangle(0, 0, raw.getWidth(), raw.getHeight()));
+        
         
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+//        ofClear(0,0,0,0);
         
         ofPushStyle();
         glPushAttrib(GL_ENABLE_BIT);
@@ -118,22 +140,29 @@ namespace itg
         glPopAttrib();
         ofPopStyle();
         
-        glViewport(0, 0, ofGetWidth(), ofGetHeight());
+//        glViewport(0, 0, ofGetWidth(), ofGetHeight());
+        ofViewport(ofRectangle(0, 0, ofGetWidth(), ofGetHeight()));
         
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
+//        glMatrixMode(GL_PROJECTION);
+//        glPopMatrix();
+//        ofPopView();
+        ofPopMatrix();
         
-        glMatrixMode(GL_MODELVIEW);
-        glPopMatrix();
+//        glMatrixMode(GL_MODELVIEW);
+//        glPopMatrix();
+//        ofPopMatrix();
+        ofPopView();
         
         raw.end();
         
         ofPushStyle();
         glPushAttrib(GL_ENABLE_BIT);
-        glDisable(GL_LIGHTING);
+//        glDisable(GL_LIGHTING);
+        ofDisableLighting();
         ofSetColor(255, 255, 255);
         process();
         if (autoDraw) draw();
+//        debugDraw();
         glPopAttrib();
         ofPopStyle();
     }
@@ -154,14 +183,17 @@ namespace itg
     {
         if (flip)
         {
-            glPushMatrix();
-            glTranslatef(x, y + h, 0);
-            glScalef(1, -1, 1);
+//            glPushMatrix();
+//            glTranslatef(x, y + h, 0);
+//            glScalef(1, -1, 1);
+            ofPushMatrix();
+            ofTranslate(x, y + h, 0);
+            ofScale(1, -1, 1);
         }
-        else glTranslatef(x, y, 0);
+        else ofTranslate(x, y, 0);//glTranslatef(x, y, 0);
         if (numProcessedPasses == 0) raw.draw(0, 0, w, h);
         else pingPong[currentReadFbo].draw(0, 0, w, h);
-        if (flip) glPopMatrix();
+        if (flip) ofPopMatrix(); //glPopMatrix();
     }
     
     ofTexture& PostProcessing::getProcessedTextureReference()

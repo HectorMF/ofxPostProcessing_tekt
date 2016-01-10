@@ -31,6 +31,7 @@
 		2843D7CE17F057C400DC03BB /* ToonPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2843D7B317F057C400DC03BB /* ToonPass.cpp */; };
 		2843D7CF17F057C400DC03BB /* VerticalTiltShifPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2843D7B517F057C400DC03BB /* VerticalTiltShifPass.cpp */; };
 		2843D7D017F057C400DC03BB /* ZoomBlurPass.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2843D7B717F057C400DC03BB /* ZoomBlurPass.cpp */; };
+		4990BDCC1C34B4DF002710AF /* shaderTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4990BDCA1C34B4DF002710AF /* shaderTest.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -133,6 +134,8 @@
 		2843D7B617F057C400DC03BB /* VerticalTiltShifPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalTiltShifPass.h; sourceTree = "<group>"; };
 		2843D7B717F057C400DC03BB /* ZoomBlurPass.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZoomBlurPass.cpp; sourceTree = "<group>"; };
 		2843D7B817F057C400DC03BB /* ZoomBlurPass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomBlurPass.h; sourceTree = "<group>"; };
+		4990BDCA1C34B4DF002710AF /* shaderTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = shaderTest.cpp; sourceTree = "<group>"; };
+		4990BDCB1C34B4DF002710AF /* shaderTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shaderTest.h; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -239,6 +242,8 @@
 				2843D7B617F057C400DC03BB /* VerticalTiltShifPass.h */,
 				2843D7B717F057C400DC03BB /* ZoomBlurPass.cpp */,
 				2843D7B817F057C400DC03BB /* ZoomBlurPass.h */,
+				4990BDCA1C34B4DF002710AF /* shaderTest.cpp */,
+				4990BDCB1C34B4DF002710AF /* shaderTest.h */,
 			);
 			name = src;
 			path = ../src;
@@ -366,6 +371,8 @@
 /* Begin PBXProject section */
 		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "example" */;
 			compatibilityVersion = "Xcode 2.4";
 			developmentRegion = English;
@@ -438,6 +445,7 @@
 				2843D7C317F057C400DC03BB /* HorizontalTiltShifPass.cpp in Sources */,
 				2843D7C417F057C400DC03BB /* KaleidoscopePass.cpp in Sources */,
 				2843D7C517F057C400DC03BB /* LimbDarkeningPass.cpp in Sources */,
+				4990BDCC1C34B4DF002710AF /* shaderTest.cpp in Sources */,
 				2843D7C617F057C400DC03BB /* LUTPass.cpp in Sources */,
 				2843D7C717F057C400DC03BB /* NoiseWarpPass.cpp in Sources */,
 				2843D7C817F057C400DC03BB /* PixelatePass.cpp in Sources */,

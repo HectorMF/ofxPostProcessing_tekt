@@ -2,31 +2,31 @@
  *  ConvolutionPass.cpp
  *
  *  Copyright (c) 2012, Neil Mendoza, http://www.neilmendoza.com
- *  All rights reserved. 
- *  
- *  Redistribution and use in source and binary forms, with or without 
- *  modification, are permitted provided that the following conditions are met: 
- *  
- *  * Redistributions of source code must retain the above copyright notice, 
- *    this list of conditions and the following disclaimer. 
- *  * Redistributions in binary form must reproduce the above copyright 
- *    notice, this list of conditions and the following disclaimer in the 
- *    documentation and/or other materials provided with the distribution. 
- *  * Neither the name of Neil Mendoza nor the names of its contributors may be used 
- *    to endorse or promote products derived from this software without 
- *    specific prior written permission. 
- *  
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
- *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE 
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE 
- *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE 
- *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR 
- *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF 
- *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS 
- *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
- *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
- *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
- *  POSSIBILITY OF SUCH DAMAGE. 
+ *  All rights reserved.
+ *
+ *  Redistribution and use in source and binary forms, with or without
+ *  modification, are permitted provided that the following conditions are met:
+ *
+ *  * Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *  * Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *  * Neither the name of Neil Mendoza nor the names of its contributors may be used
+ *    to endorse or promote products derived from this software without
+ *    specific prior written permission.
+ *
+ *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ *  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ *  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ *  ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+ *  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ *  CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ *  SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ *  INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ *  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ *  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ *  POSSIBILITY OF SUCH DAMAGE.
  *
  */
 #include "ConvolutionPass.h"
@@ -35,67 +35,100 @@
 namespace itg
 {
     ConvolutionPass::ConvolutionPass(const ofVec2f& aspect, bool arb, const ofVec2f& imageIncrement, float sigma, unsigned kernelSize) :
-        imageIncrement(imageIncrement), RenderPass(aspect, arb, "convolution")
+    imageIncrement(imageIncrement), RenderPass(aspect, arb, "convolution")
     {
+        //        string vertShaderSrc = GLSL(150,
+        //            uniform mat4 modelViewMatrix;
+        //            uniform mat4 projectionMatrix;
+        //            uniform mat4 textureMatrix;
+        //            uniform mat4 modelViewProjectionMatrix;
+        //
+        //            in vec4 position;
+        //            in vec4 color;
+        //            in vec4 normal;
+        //            in vec2 texcoord;
+        //            out vec2 varyingtexcoord;
+        //            out vec4 col;
+        //
+        //            void main() {
+        //                varyingtexcoord = texcoord;
+        //                col = color;
+        //                gl_Position = modelViewProjectionMatrix * position;
+        //            }
+        //        );
+        
         string vertShaderSrc = STRINGIFY(
-            uniform vec2 imageIncrement;
-            uniform vec2 resolution;
+                                         uniform mat4 modelViewMatrix;
+                                         uniform mat4 projectionMatrix;
+                                         uniform mat4 textureMatrix;
+                                         uniform mat4 modelViewProjectionMatrix;
+                                         uniform vec2 imageIncrement;
+                                         uniform vec2 resolution;
                                          
-            varying vec2 vUv;
-            varying vec2 scaledImageIncrement;
-            
-            void main()
-            {
-                gl_TexCoord[0] = gl_MultiTexCoord0;
-                scaledImageIncrement = imageIncrement * resolution;
-                vUv = gl_TexCoord[0].st - ( ( KERNEL_SIZE - 1.0 ) / 2.0 ) * scaledImageIncrement;
-                gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
-            }
-        );
+                                         in vec4 position;
+                                         in vec4 color;
+                                         in vec4 normal;
+                                         in vec2 texcoord;
+                                         out vec2 vUv;
+                                         out vec2 scaledImageIncrement;
+                                         
+                                         void main()
+                                         {
+                                             //                gl_TexCoord[0] = gl_MultiTexCoord0;
+                                             scaledImageIncrement = imageIncrement * resolution;
+                                             vUv = texcoord - ( ( KERNEL_SIZE - 1.0 ) / 2.0 ) * scaledImageIncrement;
+                                             gl_Position = modelViewProjectionMatrix * position;
+                                         }
+                                         );
         
         string fragShaderSrc = STRINGIFY(
-            uniform float kernel[KERNEL_SIZE];
-            uniform SAMPLER_TYPE readTex;
-            uniform vec2 imageIncrement;
-            
-            varying vec2 vUv;
-            varying vec2 scaledImageIncrement;
+                                         uniform float kernel[KERNEL_SIZE];
+                                         uniform sampler2D readTex;
+                                         uniform vec2 imageIncrement;
+                                         //            uniform float kernel_size;
                                          
-            void main()
-            {
-            
-                vec2 imageCoord = vUv;
-                vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
-                
-                for( int i = 0; i < KERNEL_SIZE; i++ )
-                {
-                    sum += TEXTURE_FN( readTex, imageCoord ) * kernel[ i ];
-                    imageCoord += scaledImageIncrement;
-                }
-                
-                gl_FragColor = sum;
-            }
-        );
+                                         in vec2 vUv;
+                                         in vec2 scaledImageIncrement;
+                                         out vec4 outputcolor;
+                                         
+                                         void main()
+                                         {
+                                             
+                                             vec2 imageCoord = vUv;
+                                             vec4 sum = vec4( 0.0, 0.0, 0.0, 0.0 );
+                                             
+                                             for( int i = 0; i < KERNEL_SIZE; i++ )
+                                             {
+                                                 sum += texture( readTex, imageCoord ) * kernel[ i ];
+                                                 imageCoord += scaledImageIncrement;
+                                             }
+                                             
+                                             outputcolor = sum;
+                                         }
+                                         );
         
         ostringstream oss;
-        oss << "#version 120\n#define KERNEL_SIZE " << kernelSize << ".0" << endl << vertShaderSrc;
+        oss << "#version 150\n#define KERNEL_SIZE " << kernelSize << ".0" << endl << vertShaderSrc;
         shader.setupShaderFromSource(GL_VERTEX_SHADER, oss.str());
         
         oss.str("");
-        oss << "#version 120\n#define KERNEL_SIZE " << kernelSize << endl;
-        if (arb)
-        {
-            oss << "#define SAMPLER_TYPE sampler2DRect" << endl;
-            oss << "#define TEXTURE_FN texture2DRect" << endl;
-        }
-        else
-        {
-            oss << "#define SAMPLER_TYPE sampler2D" << endl;
-            oss << "#define TEXTURE_FN texture2D" << endl;
-        }
+        oss << "#version 150\n#define KERNEL_SIZE " << kernelSize << endl;
+        //        if (arb)
+        //        {
+        //            oss << "#define SAMPLER_TYPE sampler2DRect" << endl;
+        //            oss << "#define TEXTURE_FN texture2DRect" << endl;
+        //        }
+        //        else
+        //        {
+        //            oss << "#define SAMPLER_TYPE sampler2D" << endl;
+        //            oss << "#define TEXTURE_FN texture2D" << endl;
+        //        }
         oss << fragShaderSrc;
+        //        shader.setupShaderFromSource(GL_VERTEX_SHADER, vertShaderSrc);
         shader.setupShaderFromSource(GL_FRAGMENT_SHADER, oss.str());
         shader.linkProgram();
+        
+        cout << "shader ConvolutionPass cargado" << endl;
         
         // build kernel
         buildKernel(sigma);
@@ -106,7 +139,7 @@ namespace itg
     {
         return expf( -( x * x ) / ( 2.0 * sigma * sigma ) );
     }
-
+    
     void ConvolutionPass::render(ofFbo& readFbo, ofFbo& writeFbo)
     {
         writeFbo.begin();

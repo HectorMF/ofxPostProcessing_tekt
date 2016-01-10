@@ -6,9 +6,24 @@
 //
 //
 
-#ifndef __example__shaderTest__
-#define __example__shaderTest__
+#pragma once
 
-#include <stdio.h>
+#include "RenderPass.h"
 
-#endif /* defined(__example__shaderTest__) */
+namespace itg
+{
+    class shaderTest : public RenderPass
+    {
+    public:
+        typedef shared_ptr<shaderTest> Ptr;
+        
+        shaderTest(const ofVec2f& aspect, bool arb);
+        
+        void render(ofFbo& readFbo, ofFbo& writeFbo, ofTexture& depth);
+        
+    private:
+        ofShader shader;
+    };
+}
+
+
