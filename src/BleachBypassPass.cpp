@@ -78,6 +78,7 @@ namespace itg
         shader.begin();
         
         shader.setUniformTexture("tDiffuse", readFbo.getTextureReference(), 0);
+        cout << "opacity " << opacity << endl;
         shader.setUniform1f("opacity", opacity);
         
         texturedQuad(0, 0, writeFbo.getWidth(), writeFbo.getHeight());
