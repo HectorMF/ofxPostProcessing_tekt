@@ -33,6 +33,7 @@
 
 //#define _ITG_TWEAKABLE
 
+#include <memory>
 #include "ofFbo.h"
 #include "ofVec3f.h"
 #include "ofShader.h"
@@ -51,8 +52,8 @@ namespace itg
 #endif
     {
     public:
-        typedef shared_ptr<RenderPass> Ptr;
-        
+        typedef std::shared_ptr<RenderPass> Ptr;
+
         RenderPass(const ofVec2f& aspect, bool arb, const string& name);
         
         virtual void render(ofFbo& readFbo, ofFbo& writeFbo, ofTexture& depth);
