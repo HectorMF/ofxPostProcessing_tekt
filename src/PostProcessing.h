@@ -36,7 +36,7 @@
 
 namespace itg
 {
-    class PostProcessing : public ofBaseDraws
+  class PostProcessing : public ofBaseDraws
     {
     public:
         typedef shared_ptr<PostProcessing> Ptr;
@@ -47,12 +47,12 @@ namespace itg
         void end(bool autoDraw = true);
         
         // float rather than int and not const to override ofBaseDraws
-        void draw(float x = 0.f, float y = 0.f);
-        void draw(float x, float y, float w, float h);
-        float getWidth() { return width; }
-        float getHeight() { return height; }
+        void draw(float x = 0.f, float y = 0.f) const;
+        void draw(float x, float y, float w, float h) const;
+        float getWidth() const { return width; }
+        float getHeight() const { return height; }
         
-        void debugDraw();
+        void debugDraw() const;
         
         template<class T>
         shared_ptr<T> createPass()

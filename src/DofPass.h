@@ -36,8 +36,7 @@
 
 namespace itg
 {
-    using namespace tr1;
-    
+
     /**
      * @see https://github.com/mrdoob/three.js/blob/master/examples/js/shaders/BokehShader.js
      */
