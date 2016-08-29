@@ -45,7 +45,6 @@
 
 namespace itg
 {
-    using namespace tr1;
     
     class RenderPass
 #ifdef _ITG_TWEAKABLE
