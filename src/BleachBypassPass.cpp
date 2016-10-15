@@ -77,7 +77,7 @@ namespace itg
         
         shader.begin();
         
-        shader.setUniformTexture("tDiffuse", readFbo.getTextureReference(), 0);
+        shader.setUniformTexture("tDiffuse", readFbo.getTexture(), 0);
         cout << "opacity " << opacity << endl;
         shader.setUniform1f("opacity", opacity);
         
