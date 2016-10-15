@@ -99,11 +99,11 @@ namespace itg
         
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
-        glLoadMatrixf(cam.getProjectionMatrix(ofRectangle(0, 0, width, height)).getPtr());
+        glLoadMatrixf(glm::value_ptr(cam.getProjectionMatrix(ofRectangle(0, 0, width, height))));
         
         glMatrixMode(GL_MODELVIEW);
         glPushMatrix();
-        glLoadMatrixf(cam.getModelViewMatrix().getPtr());
+        glLoadMatrixf(glm::value_ptr(cam.getModelViewMatrix()));
         
         glViewport(0, 0, raw.getWidth(), raw.getHeight());
         
